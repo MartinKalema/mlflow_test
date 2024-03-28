@@ -18,8 +18,9 @@ import mlflow.sklearn
 
 import logging
 
-logging.basicConfig(level=logging.WARN)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
+logging.getLogger("mlflow").setLevel(logging.DEBUG)
 
 
 def eval_metrics(actual, pred):
@@ -78,6 +79,10 @@ if __name__ == "__main__":
         predictions = lr.predict(train_x)
         signature = infer_signature(train_x, predictions)
 
+        # Remote Server set to Dagshub
+        remote_server_uri = "https://dagshub.com/kalema3502/mlflow_test.mlflow"
+        mlflow.set_tracking_uri(remote_server_uri)
+        # Remove code above to use the local server
         tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
 
         # Model registry does not work with file store
